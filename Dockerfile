@@ -10,8 +10,8 @@ RUN npm install -g pnpm
 WORKDIR /app
 
 # Copia os arquivos de definição de dependências primeiro para aproveitar o cache do Docker
-COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile
+COPY package.json ./
+RUN pnpm install
 
 # Copia o resto do código da aplicação
 COPY . .
