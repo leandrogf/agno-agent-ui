@@ -26,6 +26,9 @@ RUN pnpm build
 # Usamos uma imagem Node.js menor para a execução, pois não precisamos mais das dependências de build.
 FROM node:20-alpine AS runner
 
+# Instala o pnpm também na imagem final para que o comando 'CMD' funcione.
+RUN npm install -g pnpm
+
 WORKDIR /app
 
 # Define o ambiente para produção
@@ -36,7 +39,6 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copia os artefatos construídos do estágio 'builder'
-# COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
